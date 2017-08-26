@@ -22,7 +22,7 @@ import (
 )
 
 func main() {
-    /* Specify the http api url your
+	/* Specify the http api url your
      * rqlite node is listening on */
     adapter := rqliteadapter.NewAdapter("http://10.10.40.23:4001")
     
