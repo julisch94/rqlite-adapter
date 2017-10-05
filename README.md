@@ -1,6 +1,8 @@
 RQLite Adapter
 ====
 
+[![GoDoc](https://godoc.org/github.com/edomosystems/rqlite-adapter?status.svg)](https://godoc.org/github.com/edomosystems/rqlite-adapter)
+
 This adapter is the [RQLite](https://github.com/rqlite/rqlite) adapter for [Casbin](https://github.com/casbin/casbin). With this library, Casbin can load policies from RQLite databases or save policies to it which will then be distributed over the RQLite cluster.
 
 ## Installation
