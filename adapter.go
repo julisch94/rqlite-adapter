@@ -28,6 +28,7 @@ type CasbinRule struct {
 	PType, V0, V1, V2, V3, V4, V5 string
 }
 
+// Adapter represents the RQLite adapter for policy storage.
 type Adapter struct {
 	url  string
 	conn *gorqlite.Connection
@@ -37,6 +38,9 @@ func finalizer(a *Adapter) {
 	a.conn.Close()
 }
 
+// NewAdapter is the constructor for Adapter. It requires the url of the RQLite connection.
+// An example url could be http://10.10.40.23:4001. Wherever your RQLite is being served.
+// Make sure you use the HTTP address.
 func NewAdapter(url string) *Adapter {
 	a := &Adapter{}
 	a.url = url
@@ -97,6 +101,7 @@ func loadPolicyLine(line CasbinRule, model model.Model) {
 	persist.LoadPolicyLine(lineText, model)
 }
 
+// LoadPolicy loads policy from RQLite database.
 func (a *Adapter) LoadPolicy(model model.Model) error {
 	var err error
 	var result gorqlite.QueryResult
@@ -141,6 +146,7 @@ func savePolicyLine(ptype string, rule []string) CasbinRule {
 	return line
 }
 
+// SavePolicy saves policy to RQLite database.
 func (a *Adapter) SavePolicy(model model.Model) error {
 	a.dropTable()
 	a.createTable()
@@ -194,12 +200,14 @@ func (a *Adapter) writeLine(line CasbinRule) error {
 	return err
 }
 
+// AddPolicy adds a policy rule to the storage.
 func (a *Adapter) AddPolicy(sec string, ptype string, rule []string) error {
 	line := savePolicyLine(ptype, rule)
 	err := a.writeLine(line)
 	return err
 }
 
+// RemovePolicy removes a policy rule from the storage.
 func (a *Adapter) RemovePolicy(sec string, ptype string, rule []string) error {
 	condition := "p_type = '" + ptype + "'"
 
@@ -227,7 +235,7 @@ func (a *Adapter) RemovePolicy(sec string, ptype string, rule []string) error {
 	return err
 }
 
-func (a *Adapter) RemoveLine(sec string, line CasbinRule) error {
+func (a *Adapter) removeLine(sec string, line CasbinRule) error {
 	ptype := line.PType
 	var rules []string
 	rules = append(rules, line.V0)
@@ -240,6 +248,7 @@ func (a *Adapter) RemoveLine(sec string, line CasbinRule) error {
 	return err
 }
 
+// RemoveFilteredPolicy removes policy rules that match the filter from the storage.
 func (a *Adapter) RemoveFilteredPolicy(sec string, ptype string, fieldIndex int, fieldValues ...string) error {
 	line := CasbinRule{}
 
@@ -263,6 +272,6 @@ func (a *Adapter) RemoveFilteredPolicy(sec string, ptype string, fieldIndex int,
 		line.V5 = fieldValues[5 - fieldIndex]
 	}
 
-	err := a.RemoveLine(sec, line)
+	err := a.removeLine(sec, line)
 	return err
 }
