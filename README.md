@@ -7,7 +7,7 @@ This adapter is the [RQLite](https://github.com/rqlite/rqlite) adapter for [Casb
 
 ## Installation
 
-    go get github.com/edomosystems/rqlite-adapter
+    go get github.com/julisch94/rqlite-adapter
 
 
 ## Simple Example
@@ -18,7 +18,7 @@ package main
 import (
   "fmt"
   "github.com/casbin/casbin"
-  "github.com/edomosystems/rqlite-adapter"
+  "github.com/julisch94/rqlite-adapter"
 )
 
 func main() {
